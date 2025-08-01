@@ -1,27 +1,26 @@
+using BLL.DTOs;
 using DAL.DTOs;
-using Domain;
-using Globals;
 
-namespace DAL.Mappers;
+namespace BLL.Mappers;
 
-public class ListItemDalMapper 
+public class ListItemBLLMapper 
 {
-    public static ListItem? Map(ListItemDalDTO? dto)
+    public static ListItemDalDTO? Map(ListItemBLLDTO? dto)
     {
         if (dto == null) return null;
 
-        return new ListItem
+        return new ListItemDalDTO
         {
             Id = dto.Id,
             Description = dto.Description,
             IsDone = dto.IsDone,
             Priority = dto.Priority,
-            CreatedAt = dto.CreatedAt,
-            DueAt = dto.DueAt,
+            CreatedAt = dto.CreatedAt.ToUniversalTime(),
+            DueAt = dto.DueAt?.ToUniversalTime(),
             TaskListId = dto.TaskListId,
             ParentItemId = dto.ParentItemId,
 
-            SubItems = dto.SubItems?.Select(i => new ListItem
+            SubItems = dto.SubItems?.Select(i => new ListItemDalDTO
             {
                 Id = i.Id,
                 Description = i.Description,
@@ -35,10 +34,10 @@ public class ListItemDalMapper
         };
     }
 
-    public static ListItemDalDTO? Map(ListItem? entity)
+    public static ListItemBLLDTO? Map(ListItemDalDTO? entity)
     {
         if (entity == null) return null;
-        return new ListItemDalDTO
+        return new ListItemBLLDTO
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -48,7 +47,7 @@ public class ListItemDalMapper
             DueAt = entity.DueAt,
             TaskListId = entity.TaskListId,
             ParentItemId = entity.ParentItemId,
-            SubItems = entity.SubItems?.Select(i => new ListItemDalDTO
+            SubItems = entity.SubItems?.Select(i => new ListItemBLLDTO
             {
                 Id = i.Id,
                 Description = i.Description,

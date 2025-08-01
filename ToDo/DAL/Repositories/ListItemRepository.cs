@@ -27,6 +27,7 @@ public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
         }
 
         dbContext.Add(domainEntity);
+        dbContext.SaveChangesAsync();
     }
 
     public ListItemDalDTO Update(ListItemDalDTO entity)
@@ -38,26 +39,22 @@ public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
         }
 
         dbContext.Update(domainEntity);
+        dbContext.SaveChangesAsync();
+
         return entity;
     }
 
-    public void Remove(ListItemDalDTO entity)
+    public void Remove(Guid id)
     {
-        var domainEntity = ListItemDalMapper.Map(entity);
-        if (domainEntity == null)
-        {
-            throw new ArgumentException("Failed to map entity to domain object", nameof(entity));
-        }
-
-        dbContext.Remove(domainEntity);
+        var dbEntity = dbContext.ListItems.FirstOrDefault(e => e.Id.Equals(id));
+        if (dbEntity == null) return;
+        dbContext.Remove(dbEntity);
+        dbContext.SaveChangesAsync();
     }
 
-    public async Task RemoveAsync(Guid id)
+    public async Task<IEnumerable<ListItemDalDTO>> GetListItemsByTaskList(Guid taskListId)
     {
-        var dbEntity = await dbContext.ListItems.FirstOrDefaultAsync(e => e.Id.Equals(id));
-        if (dbEntity != null)
-        {
-            dbContext.Remove(dbEntity);
-        }
+        var items = await dbContext.ListItems.Where(e => e.TaskListId.Equals(taskListId)).ToListAsync();
+        return items.Select(ListItemDalMapper.Map)!;
     }
 }

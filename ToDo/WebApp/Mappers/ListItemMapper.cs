@@ -1,44 +1,43 @@
-using DAL.DTOs;
-using Domain;
-using Globals;
+using BLL.DTOs;
+using WebApp.DTOs;
 
-namespace DAL.Mappers;
+namespace WebApp.Mappers;
 
-public class ListItemDalMapper 
+public class ListItemMapper
 {
-    public static ListItem? Map(ListItemDalDTO? dto)
+    public static ListItemBLLDTO? Map(ListItemDTO? dto)
     {
         if (dto == null) return null;
 
-        return new ListItem
+        return new ListItemBLLDTO
         {
-            Id = dto.Id,
+            Id = dto.Id ?? Guid.NewGuid(),
             Description = dto.Description,
             IsDone = dto.IsDone,
             Priority = dto.Priority,
-            CreatedAt = dto.CreatedAt,
-            DueAt = dto.DueAt,
+            CreatedAt = dto.CreatedAt ?? DateTime.Now.ToUniversalTime(),
+            DueAt = dto.DueAt?.ToUniversalTime(),
             TaskListId = dto.TaskListId,
             ParentItemId = dto.ParentItemId,
 
-            SubItems = dto.SubItems?.Select(i => new ListItem
+            SubItems = dto.SubItems?.Select(i => new ListItemBLLDTO
             {
-                Id = i.Id,
+                Id = i.Id ?? Guid.NewGuid(),
                 Description = i.Description,
                 IsDone = i.IsDone,
                 Priority = i.Priority,
-                CreatedAt = i.CreatedAt,
-                DueAt = i.DueAt,
+                CreatedAt = i.CreatedAt ?? DateTime.Now.ToUniversalTime(),
+                DueAt = i.DueAt?.ToUniversalTime(),
                 TaskListId = i.TaskListId,
                 ParentItemId = i.ParentItemId,
             }).ToList()
         };
     }
 
-    public static ListItemDalDTO? Map(ListItem? entity)
+    public static ListItemDTO? Map(ListItemBLLDTO? entity)
     {
         if (entity == null) return null;
-        return new ListItemDalDTO
+        return new ListItemDTO
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -48,7 +47,7 @@ public class ListItemDalMapper
             DueAt = entity.DueAt,
             TaskListId = entity.TaskListId,
             ParentItemId = entity.ParentItemId,
-            SubItems = entity.SubItems?.Select(i => new ListItemDalDTO
+            SubItems = entity.SubItems?.Select(i => new ListItemDTO
             {
                 Id = i.Id,
                 Description = i.Description,

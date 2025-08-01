@@ -12,5 +12,6 @@ public interface IListItemRepository
 
     ListItemDalDTO Update(ListItemDalDTO entity);
 
-    Task RemoveAsync(Guid id);
+    void Remove(Guid id);
+    Task<IEnumerable<ListItemDalDTO>> GetListItemsByTaskList(Guid taskListId);
 }

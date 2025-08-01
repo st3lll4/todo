@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using Globals;
 
 namespace Domain;
 
 public class ListItem
 {
+    [Required]
     public Guid Id { get; set; }
     
     public string Description { get; set; } = default!;

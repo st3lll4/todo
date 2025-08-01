@@ -1,12 +1,18 @@
 using System.Text.Json.Serialization;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+using BLL.Contracts;
+using BLL.Services;
 using DAL;
 using DAL.Contracts;
-using DAL.Mappers;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Options;
 using Npgsql;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using WebApp;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,13 +64,17 @@ else
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-
 builder.Services.AddScoped<ITaskListRepository, TaskListRepository>();
 builder.Services.AddScoped<IListItemRepository, ListItemRepository>();
 
+builder.Services.AddScoped<ITaskListService, TaskListService>();
+builder.Services.AddScoped<IListItemService, ListItemService>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -80,7 +90,8 @@ else
 
 app.UseRouting();
 
-app.UseCors("CorsAllowAll");
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 

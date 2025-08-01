@@ -12,5 +12,5 @@ public interface ITaskListRepository
         
     TaskListDalDTO Update(TaskListDalDTO entity);
 
-    Task RemoveAsync(Guid id);
+    void Remove(Guid id);
 }
