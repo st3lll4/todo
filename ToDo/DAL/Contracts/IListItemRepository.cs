@@ -8,10 +8,10 @@ public interface IListItemRepository
 
     Task<ListItemDalDTO?> FindAsync(Guid id);
 
-    void Add(ListItemDalDTO entity);
+    Task AddAsync(ListItemDalDTO entity);
 
-    ListItemDalDTO Update(ListItemDalDTO entity);
+    Task<ListItemDalDTO> UpdateAsync(ListItemDalDTO entity);
 
-    void Remove(Guid id);
+    Task RemoveAsync(Guid id);
     Task<IEnumerable<ListItemDalDTO>> GetListItemsByTaskList(Guid taskListId);
 }

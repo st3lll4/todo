@@ -9,52 +9,53 @@ public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
 {
     public async Task<IEnumerable<ListItemDalDTO>> AllAsync()
     {
-        return await dbContext.ListItems.Select(e => ListItemDalMapper.Map(e)!).ToListAsync();
+        return await dbContext.ListItems
+            .AsNoTracking()
+            .OrderBy(e => e.CreatedAt)
+            .Select(e => ListItemDalMapper.Map(e))
+            .ToListAsync();
     }
 
     public async Task<ListItemDalDTO?> FindAsync(Guid id)
     {
-        var entity = await dbContext.ListItems.FirstOrDefaultAsync(e => e.Id.Equals(id));
-        return ListItemDalMapper.Map(entity);
+        return await dbContext.ListItems
+            .AsNoTracking()
+            .Where(e => e.Id.Equals(id))
+            .Select(e => ListItemDalMapper.Map(e))
+            .FirstOrDefaultAsync();
     }
 
-    public void Add(ListItemDalDTO entity)
+    public async Task AddAsync(ListItemDalDTO entity)
     {
         var domainEntity = ListItemDalMapper.Map(entity);
-        if (domainEntity == null)
-        {
-            throw new ArgumentException("Failed to map entity to domain object", nameof(entity));
-        }
-
         dbContext.Add(domainEntity);
-        dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
-    public ListItemDalDTO Update(ListItemDalDTO entity)
+    public async Task<ListItemDalDTO> UpdateAsync(ListItemDalDTO entity)
     {
         var domainEntity = ListItemDalMapper.Map(entity);
-        if (domainEntity == null)
-        {
-            throw new ArgumentException("Failed to map entity to domain object", nameof(entity));
-        }
-
         dbContext.Update(domainEntity);
-        dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return entity;
     }
 
-    public void Remove(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
-        var dbEntity = dbContext.ListItems.FirstOrDefault(e => e.Id.Equals(id));
+        var dbEntity = await dbContext.ListItems.FirstOrDefaultAsync(e => e.Id.Equals(id));
         if (dbEntity == null) return;
         dbContext.Remove(dbEntity);
-        dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<ListItemDalDTO>> GetListItemsByTaskList(Guid taskListId)
     {
-        var items = await dbContext.ListItems.Where(e => e.TaskListId.Equals(taskListId)).ToListAsync();
-        return items.Select(ListItemDalMapper.Map)!;
+        var items = await dbContext.ListItems
+            .AsNoTracking()
+            .OrderBy(e => e.CreatedAt)
+            .Where(e => e.TaskListId.Equals(taskListId))
+            .ToListAsync();
+        return items.Select(ListItemDalMapper.Map);
     }
 }

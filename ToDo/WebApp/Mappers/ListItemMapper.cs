@@ -5,10 +5,8 @@ namespace WebApp.Mappers;
 
 public class ListItemMapper
 {
-    public static ListItemBLLDTO? Map(ListItemDTO? dto)
+    public static ListItemBLLDTO Map(ListItemDTO dto)
     {
-        if (dto == null) return null;
-
         return new ListItemBLLDTO
         {
             Id = dto.Id ?? Guid.NewGuid(),
@@ -34,9 +32,8 @@ public class ListItemMapper
         };
     }
 
-    public static ListItemDTO? Map(ListItemBLLDTO? entity)
+    public static ListItemDTO Map(ListItemBLLDTO entity)
     {
-        if (entity == null) return null;
         return new ListItemDTO
         {
             Id = entity.Id,

@@ -9,10 +9,10 @@ public interface IListItemService
 
     Task<ListItemBLLDTO?> FindAsync(Guid id);
 
-    void Add(ListItemBLLDTO entity);
+    Task AddAsync(ListItemBLLDTO entity);
 
-    ListItemBLLDTO Update(ListItemBLLDTO entity);
+    Task<ListItemBLLDTO> UpdateAsync(ListItemBLLDTO entity);
 
-    void Remove(Guid id);
+    Task RemoveAsync(Guid id);
     Task<IEnumerable<ListItemBLLDTO>> GetListItemsByTaskList(Guid taskListId);
 }

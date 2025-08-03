@@ -1,16 +1,17 @@
 using BLL.DTOs;
+using Globals;
 
 namespace BLL.Contracts;
 
 public interface ITaskListService
 {
-    Task<IEnumerable<TaskListBLLDTO>> AllAsync();
+    Task<IEnumerable<TaskListBLLDTO>> AllAsync(FilterDTO? filter);
 
     Task<TaskListBLLDTO?> FindAsync(Guid id);
 
-    void Add(TaskListBLLDTO entity);
+    Task AddAsync(TaskListBLLDTO entity);
 
-    TaskListBLLDTO Update(TaskListBLLDTO entity);
+    Task<TaskListBLLDTO> UpdateAsync(TaskListBLLDTO entity);
 
-    void Remove(Guid id);
+    Task RemoveAsync(Guid id);
 }

@@ -1,4 +1,5 @@
 using BLL.Contracts;
+using Globals;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.DTOs;
 using WebApp.Mappers;
@@ -17,15 +18,15 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Gets all task lists
+        /// Gets all lists filtered if filters are specified
         /// </summary>
         /// <returns>Collection of task lists</returns>
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<TaskListDTO>), 200)]
-        public async Task<ActionResult<IEnumerable<TaskListDTO>>> GetTaskLists()
+        public async Task<ActionResult<IEnumerable<TaskListDTO>>> GetTaskLists(FilterDTO filter)
         {
-            var taskLists = await _service.AllAsync();
+            var taskLists = await _service.AllAsync(filter);
             return Ok(taskLists.Select(TaskListMapper.Map));
         }
 
@@ -80,7 +81,7 @@ namespace WebApp.ApiControllers
 
             var listBLLDto = TaskListMapper.Map(list);
 
-            if (listBLLDto != null) _service.Update(listBLLDto);
+            await _service.UpdateAsync(listBLLDto);
 
             return NoContent();
         }
@@ -93,7 +94,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(typeof(TaskListDTO), 201)]
         [ProducesResponseType(400)]
         [HttpPost]
-        public ActionResult PostTaskList(TaskListDTO entity)
+        public async Task<ActionResult> PostTaskList(TaskListDTO entity)
         {
             if (!ModelState.IsValid)
             {
@@ -102,19 +103,11 @@ namespace WebApp.ApiControllers
 
             var listBLLDto = TaskListMapper.Map(entity);
 
-            if (listBLLDto == null)
-            {
-                return BadRequest();
-            }
 
-            _service.Add(listBLLDto);
+            await _service.AddAsync(listBLLDto);
 
             var response = TaskListMapper.Map(listBLLDto);
 
-            if (response == null)
-            {
-                return BadRequest();
-            }
 
             return CreatedAtAction("GetTaskList",
                 new { id = response.Id }, response);
@@ -137,7 +130,7 @@ namespace WebApp.ApiControllers
                 return NoContent();
             }
 
-            _service.Remove(taskList.Id);
+            await _service.RemoveAsync(taskList.Id);
 
             return NoContent();
         }

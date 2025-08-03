@@ -6,10 +6,8 @@ namespace DAL.Mappers;
 
 public class ListItemDalMapper 
 {
-    public static ListItem? Map(ListItemDalDTO? dto)
+    public static ListItem Map(ListItemDalDTO dto)
     {
-        if (dto == null) return null;
-
         return new ListItem
         {
             Id = dto.Id,
@@ -35,9 +33,8 @@ public class ListItemDalMapper
         };
     }
 
-    public static ListItemDalDTO? Map(ListItem? entity)
+    public static ListItemDalDTO Map(ListItem entity)
     {
-        if (entity == null) return null;
         return new ListItemDalDTO
         {
             Id = entity.Id,

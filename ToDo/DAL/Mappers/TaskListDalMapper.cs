@@ -7,10 +7,8 @@ namespace DAL.Mappers;
 public class TaskListDalMapper 
 
 {
-    public static TaskList? Map(TaskListDalDTO? dto)
+    public static TaskList Map(TaskListDalDTO dto)
     {
-        if (dto == null) return null;
-
         return new TaskList
         {
             Id = dto.Id,
@@ -29,9 +27,8 @@ public class TaskListDalMapper
         };
     }
 
-    public static TaskListDalDTO? Map(TaskList? entity)
+    public static TaskListDalDTO Map(TaskList entity)
     {
-        if (entity == null) return null;
         return new TaskListDalDTO
         {
             Id = entity.Id,

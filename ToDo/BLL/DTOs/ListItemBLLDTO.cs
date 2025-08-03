@@ -15,7 +15,7 @@ public class ListItemBLLDTO
     public DateTime? DueAt { get; set; }
 
     public Guid TaskListId { get; set; }
-    public TaskListBLLDTO? TaskList { get; set; } = default!;
+    public TaskListBLLDTO? TaskList { get; set; }
 
 
     public Guid? ParentItemId { get; set; }

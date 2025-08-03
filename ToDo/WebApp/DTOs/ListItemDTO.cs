@@ -17,7 +17,7 @@ public class ListItemDTO : IValidatableObject
     public DateTime? DueAt { get; set; }
     
     public Guid TaskListId { get; set; }    
-    public TaskListDTO? TaskList { get; set; } = default!;
+    public TaskListDTO? TaskList { get; set; }
     
     public Guid? ParentItemId { get; set; }
     public ListItemDTO? ParentItem { get; set; }

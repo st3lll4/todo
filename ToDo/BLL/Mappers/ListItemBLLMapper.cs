@@ -5,10 +5,8 @@ namespace BLL.Mappers;
 
 public class ListItemBLLMapper 
 {
-    public static ListItemDalDTO? Map(ListItemBLLDTO? dto)
+    public static ListItemDalDTO Map(ListItemBLLDTO dto)
     {
-        if (dto == null) return null;
-
         return new ListItemDalDTO
         {
             Id = dto.Id,
@@ -34,9 +32,8 @@ public class ListItemBLLMapper
         };
     }
 
-    public static ListItemBLLDTO? Map(ListItemDalDTO? entity)
+    public static ListItemBLLDTO Map(ListItemDalDTO entity)
     {
-        if (entity == null) return null;
         return new ListItemBLLDTO
         {
             Id = entity.Id,

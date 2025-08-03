@@ -5,10 +5,8 @@ namespace WebApp.Mappers;
 
 public class TaskListMapper
 {
-    public static TaskListBLLDTO? Map(TaskListDTO? dto)
+    public static TaskListBLLDTO Map(TaskListDTO dto)
     {
-        if (dto == null) return null;
-
         return new TaskListBLLDTO
         {
             Id = dto.Id ?? Guid.NewGuid(),
@@ -27,9 +25,8 @@ public class TaskListMapper
         };
     }
 
-    public static TaskListDTO? Map(TaskListBLLDTO? entity)
+    public static TaskListDTO Map(TaskListBLLDTO entity)
     {
-        if (entity == null) return null;
         return new TaskListDTO
         {
             Id = entity.Id,

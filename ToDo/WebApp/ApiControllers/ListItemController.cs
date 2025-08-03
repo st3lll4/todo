@@ -1,23 +1,32 @@
 using BLL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.DTOs;
-using System.Linq;
-using BLL.DTOs;
 using WebApp.Mappers;
 
 namespace WebApp.ApiControllers
 {
+    /// <summary>
+    /// API controller for managing list items
+    /// </summary>
     [Route("api/listItems")]
     [ApiController]
     public class ListItemController : ControllerBase
     {
         private readonly IListItemService _service;
 
+        /// <summary>
+        /// Constructor for ListItemController
+        /// </summary>
+        /// <param name="service">The list item service</param>
         public ListItemController(IListItemService service)
         {
             _service = service;
         }
         
+        /// <summary>
+        /// Gets all list items
+        /// </summary>
+        /// <returns>Collection of list items</returns>
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<ListItemDTO>), 200)]
@@ -27,6 +36,11 @@ namespace WebApp.ApiControllers
             return Ok(taskLists.Select(ListItemMapper.Map));
         }
 
+        /// <summary>
+        /// Gets a specific list item by id
+        /// </summary>
+        /// <param name="id">The id of the list item</param>
+        /// <returns>The requested list item</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ListItemDTO), 200)]
@@ -43,6 +57,11 @@ namespace WebApp.ApiControllers
             return Ok(ListItemMapper.Map(listItem));
         }
         
+        /// <summary>
+        /// Gets all list items for a specific task list
+        /// </summary>
+        /// <param name="taskListId">The id of the task list</param>
+        /// <returns>Collection of list items belonging to the task list</returns>
         [HttpGet("byTask/{taskListId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -57,6 +76,12 @@ namespace WebApp.ApiControllers
             return Ok(result.Select(ListItemMapper.Map));
         }
 
+        /// <summary>
+        /// Updates a specific list item
+        /// </summary>
+        /// <param name="id">The id of the list item to update</param>
+        /// <param name="listItem">The updated list item data</param>
+        /// <returns>No content if successful</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -81,15 +106,20 @@ namespace WebApp.ApiControllers
 
             var itemBLLDTO = ListItemMapper.Map(listItem);
 
-            if (itemBLLDTO != null) _service.Update(itemBLLDTO);
+            await _service.UpdateAsync(itemBLLDTO);
 
             return NoContent();
         }
 
+        /// <summary>
+        /// Creates a new list item
+        /// </summary>
+        /// <param name="entity">The list item to create</param>
+        /// <returns>The created list item</returns>
         [ProducesResponseType(typeof(TaskListDTO), 201)]
         [ProducesResponseType(400)]
         [HttpPost]
-        public ActionResult<ListItemDTO> PostListItem(ListItemDTO entity)
+        public async Task<ActionResult<ListItemDTO>> PostListItem(ListItemDTO entity)
         {
             if (!ModelState.IsValid)
             {
@@ -98,25 +128,21 @@ namespace WebApp.ApiControllers
 
             var itemBLLDTO = ListItemMapper.Map(entity);
 
-            if (itemBLLDTO == null)
-            {
-                return BadRequest();
-            }
 
-            _service.Add(itemBLLDTO);
+            await _service.AddAsync(itemBLLDTO);
 
             var response = ListItemMapper.Map(itemBLLDTO);
 
-            if (response == null)
-            {
-                return BadRequest();
-            }
 
             return CreatedAtAction("GetListItem",
                 new { id = response.Id }, response);
         }
 
-        
+        /// <summary>
+        /// Deletes a specific list item
+        /// </summary>
+        /// <param name="id">The id of the list item to delete</param>
+        /// <returns>No content if successful</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -129,7 +155,7 @@ namespace WebApp.ApiControllers
                 return NoContent();
             }
 
-            _service.Remove(item.Id);
+            await _service.RemoveAsync(item.Id);
 
             return NoContent();
         }

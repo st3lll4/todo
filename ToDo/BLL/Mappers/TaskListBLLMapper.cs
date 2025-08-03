@@ -5,10 +5,8 @@ namespace BLL.Mappers;
 
 public class TaskListBLLMapper
 {
-    public static TaskListDalDTO? Map(TaskListBLLDTO? dto)
+    public static TaskListDalDTO Map(TaskListBLLDTO dto)
     {
-        if (dto == null) return null;
-
         return new TaskListDalDTO
         {
             Id = dto.Id,
@@ -27,9 +25,8 @@ public class TaskListBLLMapper
         };
     }
 
-    public static TaskListBLLDTO? Map(TaskListDalDTO? entity)
+    public static TaskListBLLDTO Map(TaskListDalDTO entity)
     {
-        if (entity == null) return null;
         return new TaskListBLLDTO
         {
             Id = entity.Id,

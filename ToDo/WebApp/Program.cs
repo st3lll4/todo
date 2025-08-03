@@ -70,6 +70,17 @@ builder.Services.AddScoped<IListItemRepository, ListItemRepository>();
 builder.Services.AddScoped<ITaskListService, TaskListService>();
 builder.Services.AddScoped<IListItemService, ListItemService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsAllowAll", policy =>
+    {
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.AllowAnyOrigin();
+        policy.SetIsOriginAllowed((host) => true);
+    });
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -89,6 +100,7 @@ else
 }
 
 app.UseRouting();
+app.UseCors("CorsAllowAll");
 
 app.UseSwagger();
 app.UseSwaggerUI();

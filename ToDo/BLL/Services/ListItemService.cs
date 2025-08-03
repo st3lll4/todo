@@ -10,35 +10,35 @@ public class ListItemService(IListItemRepository repository) : IListItemService
     public async Task<IEnumerable<ListItemBLLDTO>> AllAsync()
     {
         var dalItems = await repository.AllAsync();
-        return dalItems.Select(ListItemBLLMapper.Map)!;
+        return dalItems.Select(ListItemBLLMapper.Map);
     }
 
     public async Task<ListItemBLLDTO?> FindAsync(Guid id)
     {
         var dalItem = await repository.FindAsync(id);
+        if (dalItem == null) return null;
         return ListItemBLLMapper.Map(dalItem);
     }
 
-    public void Add(ListItemBLLDTO entity)
+    public async Task AddAsync(ListItemBLLDTO entity)
     {
         var dalEntity = ListItemBLLMapper.Map(entity);
-        if (dalEntity != null)
-        {
-            repository.Add(dalEntity);
-        }
+            await repository.AddAsync(dalEntity);
+        
     }
 
-    public ListItemBLLDTO Update(ListItemBLLDTO entity)
+    public async Task<ListItemBLLDTO> UpdateAsync(ListItemBLLDTO entity)
     {
         var dalEntity = ListItemBLLMapper.Map(entity);
-        var updatedDalEntity = repository.Update(dalEntity!);
-        return ListItemBLLMapper.Map(updatedDalEntity)!;
+        var updatedDalEntity = await repository.UpdateAsync(dalEntity);
+        return ListItemBLLMapper.Map(updatedDalEntity);
     }
 
-    public void Remove(Guid id) => repository.Remove(id);
+    public async Task RemoveAsync(Guid id) => await repository.RemoveAsync(id);
+    
     public async Task<IEnumerable<ListItemBLLDTO>> GetListItemsByTaskList(Guid taskListId)
     {
         var dalItems = await repository.GetListItemsByTaskList(taskListId);
-        return dalItems.Select(ListItemBLLMapper.Map)!;
+        return dalItems.Select(ListItemBLLMapper.Map);
     }
 }

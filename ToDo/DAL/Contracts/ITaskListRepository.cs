@@ -1,16 +1,17 @@
 using DAL.DTOs;
+using Globals;
 
 namespace DAL.Contracts;
 
 public interface ITaskListRepository
 {
-    Task<IEnumerable<TaskListDalDTO>> AllAsync();
+    Task<IEnumerable<TaskListDalDTO>> AllAsync(FilterDTO? filter);
 
     Task<TaskListDalDTO?> FindAsync(Guid id);
 
-    void Add(TaskListDalDTO entity);
+    Task AddAsync(TaskListDalDTO entity);
         
-    TaskListDalDTO Update(TaskListDalDTO entity);
+    Task<TaskListDalDTO> UpdateAsync(TaskListDalDTO entity);
 
-    void Remove(Guid id);
+    Task RemoveAsync(Guid id);
 }

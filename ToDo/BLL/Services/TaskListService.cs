@@ -2,42 +2,40 @@ using BLL.Contracts;
 using BLL.DTOs;
 using BLL.Mappers;
 using DAL.Contracts;
+using Globals;
 
 namespace BLL.Services;
 
 public class TaskListService(ITaskListRepository repository) : ITaskListService
 {
-    public async Task<IEnumerable<TaskListBLLDTO>> AllAsync()
+    public async Task<IEnumerable<TaskListBLLDTO>> AllAsync(FilterDTO? filter)
     {
-        var dalItems = await repository.AllAsync();
-        return dalItems.Select(TaskListBLLMapper.Map).Where(x => x != null)!;
+        var dalItems = await repository.AllAsync(filter);
+        return dalItems.Select(TaskListBLLMapper.Map);
     }
 
     public async Task<TaskListBLLDTO?> FindAsync(Guid id)
     {
         var dalItem = await repository.FindAsync(id);
+        if (dalItem == null) return null;
         return TaskListBLLMapper.Map(dalItem);
     }
 
-    public void Add(TaskListBLLDTO entity)
+    public async Task AddAsync(TaskListBLLDTO entity)
     {
         var dalEntity = TaskListBLLMapper.Map(entity);
-        if (dalEntity != null)
-        {
-            repository.Add(dalEntity);
-        }
+        await repository.AddAsync(dalEntity);
     }
 
-    public TaskListBLLDTO Update(TaskListBLLDTO entity)
+    public async Task<TaskListBLLDTO> UpdateAsync(TaskListBLLDTO entity)
     {
         var dalEntity = TaskListBLLMapper.Map(entity);
-        var updatedDalEntity = repository.Update(dalEntity!);
-        return TaskListBLLMapper.Map(updatedDalEntity)!;
+        var updatedDalEntity = await repository.UpdateAsync(dalEntity);
+        return TaskListBLLMapper.Map(updatedDalEntity);
     }
 
-    public void Remove(Guid id)
-    { 
-        repository.Remove(id);
+    public async Task RemoveAsync(Guid id)
+    {
+        await repository.RemoveAsync(id);
     }
-    
 }
