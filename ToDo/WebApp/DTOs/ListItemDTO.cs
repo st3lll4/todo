@@ -3,7 +3,7 @@ using Globals;
 
 namespace WebApp.DTOs;
 
-public class ListItemDTO : IValidatableObject
+public class ListItemDTO 
 {
     public Guid? Id { get; set; }
     
@@ -23,12 +23,5 @@ public class ListItemDTO : IValidatableObject
     public ListItemDTO? ParentItem { get; set; }
 
     public ICollection<ListItemDTO>? SubItems { get; set; }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (ParentItem?.Id == Id)
-        {
-            yield return new ValidationResult("Parent item and child item ID error", [nameof(Id), nameof(ParentItemId)]);
-        }
-    }
+    
 }

@@ -99,6 +99,8 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
                 title: data.title,
             };
 
+            // siin mingi variable clusterfuck data id ja tasklist data id
+
             let res: ResultObject<TaskList>;
 
             if (list?.id) {
@@ -134,9 +136,12 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
                 }
                 res = await taskListService.addAsync(taskListData);
                 if (res.data?.id) {
+                    console.log('items', data.listItems);
                     data.listItems.map(async (item) => {
                         const itemWithTaskListId = {...item, taskListId: res.data?.id};
                         const result = await listItemService.addAsync(itemWithTaskListId);
+                        console.log('item', item, itemWithTaskListId);
+                        console.log('result', result);
                         if (result.errors) {
                             onError(result.errors);
                         }
@@ -254,7 +259,7 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
                     render={({field: controllerField}) => (
                         <Datepicker
                             label="When is it due?"
-                            className={`col-span-3 w-full ${isOverdue(field.dueAt) ? 'border-red-500' : ''}`}
+                            className={`col-span-3 w-full `}
                             value={controllerField.value ?? null}
                             onChange={controllerField.onChange}
                         />

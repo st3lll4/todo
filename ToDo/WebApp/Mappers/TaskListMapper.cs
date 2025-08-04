@@ -38,7 +38,8 @@ public class TaskListMapper
                 Priority = i.Priority,
                 CreatedAt = i.CreatedAt,
                 DueAt = i.DueAt,
-                TaskListId = i.TaskListId
+                TaskListId = i.TaskListId,
+                ParentItemId = i.ParentItemId,
             }).ToList()
         };
     }

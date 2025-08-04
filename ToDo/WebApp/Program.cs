@@ -5,6 +5,7 @@ using BLL.Contracts;
 using BLL.Services;
 using DAL;
 using DAL.Contracts;
+using DAL.DataSeeding;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
@@ -89,6 +90,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+await SetupAppData(app, app.Configuration);
 
 if (app.Environment.IsDevelopment())
 {
@@ -120,3 +122,71 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+static async Task SetupAppData(IApplicationBuilder app, IConfiguration configuration)
+{
+    using var serviceScope = app.ApplicationServices
+        .GetRequiredService<IServiceScopeFactory>()
+        .CreateScope();
+    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<IApplicationBuilder>>();
+    var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    // since app uses container, should wait the db connection
+    WaitDbConnection(context, logger);
+
+    if (context.Database.ProviderName!.Contains("InMemory"))
+    {
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        return;
+    }
+
+    if (configuration.GetValue<bool>("DataInitialization:DropDatabase"))
+    {
+        logger.LogWarning("Drop db");
+        AppDataInit.DeleteDatabase(context);
+    }
+
+    if (configuration.GetValue<bool>("DataInitialization:MigrateDatabase"))
+    {
+        logger.LogInformation("Migrate db");
+        AppDataInit.MigrateDatabase(context);
+    }
+
+    if (configuration.GetValue<bool>("DataInitialization:SeedData"))
+    {
+        logger.LogInformation("SeedData");
+        await AppDataInit.SeedData(context);
+    }
+}
+
+static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logger)
+{
+
+    while (true)
+    {
+        try
+        {
+            ctx.Database.OpenConnection();
+            ctx.Database.CloseConnection();
+            return;
+        }
+        catch (PostgresException e)
+        {
+            logger.LogWarning("Checked postgres db connection. Got: {}", e.Message);
+
+            if (e.Message.Contains("does not exist"))
+            {
+                logger.LogWarning("Applying migration, probably db is not there (but server is)");
+                return;
+            }
+
+            logger.LogWarning("Waiting for db connection. Sleep 1 sec");
+            Thread.Sleep(1000);
+        }
+    }
+}
+
+// needed for testing 
+public partial class Program
+{
+}

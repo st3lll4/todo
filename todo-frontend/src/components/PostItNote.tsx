@@ -8,11 +8,12 @@ interface PostItNoteProps {
 }
 
 export default function PostItNote({list, colorClass, onClick}: PostItNoteProps) {
-    const tenFirstItems = list.listItems?.slice(0, 7);
+    const visibleItems = list.listItems?.slice(0, 7);
     const remainingCount = (list.listItems?.length || 0) - 7;
     const completedCount = list.listItems?.filter(item => item.isDone).length || 0;
     const totalCount = list.listItems?.length || 0;
 
+    console.log('list', list);
 
     return <Card
         onClick={onClick}
@@ -27,7 +28,7 @@ export default function PostItNote({list, colorClass, onClick}: PostItNoteProps)
             </h3>
 
             <div className="flex-1">
-                {tenFirstItems?.map((item, index) => (
+                {visibleItems?.map((item, index) => (
                     <div
                         key={item.id || index}
                         className="flex items-center gap-2 my-1 text-sm"
@@ -52,9 +53,9 @@ export default function PostItNote({list, colorClass, onClick}: PostItNoteProps)
                         >
                                 {item.description}
                             </span>
-                        {item.priority === 'Low' && <Badge color="green" className="text-xs">Low</Badge>}
-                        {item.priority === 'Medium' && <Badge color="warning" className="text-xs">Medium</Badge>}
-                        {item.priority === 'High' && <Badge color="pink" className="text-xs">High</Badge>}
+                        {item.priority == "Low" && <Badge color="green" className="text-xs">Low</Badge>}
+                        {item.priority == "Medium" && <Badge color="warning" className="text-xs">Medium</Badge>}
+                        {item.priority == "High" && <Badge color="pink" className="text-xs">High</Badge>}
                     </div>
 
                     ))}

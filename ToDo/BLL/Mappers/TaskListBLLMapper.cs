@@ -18,7 +18,8 @@ public class TaskListBLLMapper
                 IsDone = i.IsDone,
                 Priority = i.Priority,
                 DueAt = i.DueAt,
-                TaskListId = i.TaskListId
+                TaskListId = i.TaskListId,
+                ParentItemId = i.ParentItemId,
             }).ToList()
         };
     }

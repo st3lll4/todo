@@ -22,11 +22,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<ListItem>()
-            .Property(cp => cp.Priority)
-            .HasConversion<string>();
-
+        
         modelBuilder.Entity<TaskList>()
             .Property(e => e.CreatedAt)
             .HasDefaultValueSql("NOW()")

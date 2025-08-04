@@ -1,8 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { AxiosError } from "axios";
-import { ResultObject } from "../types/ResultObject";
-import { TaskList } from "../types/TaskList";
-import { FilterDTO } from "@/types/FilterDTO";
+import { ResultObject } from "@/types/ResultObject";
+import { TaskList } from "@/types/TaskList";
 
 export class TaskListService {
   protected axiosInstance: AxiosInstance;
@@ -62,7 +61,6 @@ export class TaskListService {
 
   async addAsync(entity: TaskList): Promise<ResultObject<TaskList>> {
     try {
-      console.log("posting ", entity);
       const response = await this.axiosInstance.post<TaskList>(
         this.basePath,
         entity
