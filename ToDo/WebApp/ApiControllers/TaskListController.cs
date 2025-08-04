@@ -24,7 +24,8 @@ namespace WebApp.ApiControllers
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<TaskListDTO>), 200)]
-        public async Task<ActionResult<IEnumerable<TaskListDTO>>> GetTaskLists(FilterDTO filter)
+        public async Task<ActionResult<IEnumerable<TaskListDTO>>> GetTaskLists(
+            [FromQuery] FilterDTO? filter)
         {
             var taskLists = await _service.AllAsync(filter);
             return Ok(taskLists.Select(TaskListMapper.Map));

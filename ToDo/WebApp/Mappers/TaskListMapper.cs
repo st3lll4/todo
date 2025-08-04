@@ -11,14 +11,12 @@ public class TaskListMapper
         {
             Id = dto.Id ?? Guid.NewGuid(),
             Title = dto.Title,
-            CreatedAt = dto.CreatedAt ?? DateTime.Now.ToUniversalTime(),
             ListItems = dto.ListItems?.Select(i => new ListItemBLLDTO
             {
                 Id = i.Id ?? Guid.NewGuid(),
                 Description = i.Description,
                 IsDone = i.IsDone,
                 Priority = i.Priority,
-                CreatedAt = i.CreatedAt ?? DateTime.Now.ToUniversalTime(),
                 DueAt = i.DueAt?.ToUniversalTime(),
                 TaskListId = i.TaskListId
             }).ToList()

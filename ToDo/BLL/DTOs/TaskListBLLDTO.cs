@@ -6,7 +6,7 @@ public class TaskListBLLDTO
     
     public string Title { get; set; } = default!;
     
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
     
     public ICollection<ListItemBLLDTO>? ListItems { get; set; }
 }

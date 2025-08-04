@@ -7,11 +7,6 @@ namespace BLL.Services;
 
 public class ListItemService(IListItemRepository repository) : IListItemService
 {
-    public async Task<IEnumerable<ListItemBLLDTO>> AllAsync()
-    {
-        var dalItems = await repository.AllAsync();
-        return dalItems.Select(ListItemBLLMapper.Map);
-    }
 
     public async Task<ListItemBLLDTO?> FindAsync(Guid id)
     {
@@ -22,6 +17,7 @@ public class ListItemService(IListItemRepository repository) : IListItemService
 
     public async Task AddAsync(ListItemBLLDTO entity)
     {
+        entity.CreatedAt ??= DateTime.UtcNow;
         var dalEntity = ListItemBLLMapper.Map(entity);
             await repository.AddAsync(dalEntity);
         
@@ -36,9 +32,4 @@ public class ListItemService(IListItemRepository repository) : IListItemService
 
     public async Task RemoveAsync(Guid id) => await repository.RemoveAsync(id);
     
-    public async Task<IEnumerable<ListItemBLLDTO>> GetListItemsByTaskList(Guid taskListId)
-    {
-        var dalItems = await repository.GetListItemsByTaskList(taskListId);
-        return dalItems.Select(ListItemBLLMapper.Map);
-    }
 }

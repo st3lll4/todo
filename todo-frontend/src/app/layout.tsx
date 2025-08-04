@@ -1,20 +1,26 @@
-'use client';
 import "./globals.css";
-import Header from "@/components/Header";
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+    title: "Todo App",
+    description: "A simple todo list application",
+};
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body>
-          <Header/>
-          <main className='w-full flex justify-center'>
-              {children}
-          </main>
-      </body>
-    </html>
-  );
+
+    return (
+        <html lang="en">
+        <body>
+        <div className="flex">
+            <main className="w-full flex justify-center">
+                {children}
+            </main>
+        </div>
+        </body>
+        </html>
+    );
 }

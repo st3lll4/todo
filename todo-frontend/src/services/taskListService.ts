@@ -2,10 +2,12 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { AxiosError } from "axios";
 import { ResultObject } from "../types/ResultObject";
 import { TaskList } from "../types/TaskList";
+import { FilterDTO } from "@/types/FilterDTO";
 
 export class TaskListService {
   protected axiosInstance: AxiosInstance;
-  private basePath : string = 'taskLists/'
+  private basePath: string = 'taskLists/'
+
   constructor() {
     this.axiosInstance = axios.create({
       baseURL: "http://localhost:5066/api/",

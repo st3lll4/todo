@@ -6,7 +6,7 @@ public class TaskListDalDTO
     
     public string Title { get; set; } = default!;
     
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
     
     public ICollection<ListItemDalDTO>? ListItems { get; set; }
 }

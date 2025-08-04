@@ -11,33 +11,37 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
     public async Task<IEnumerable<TaskListDalDTO>> AllAsync(FilterDTO? filter)
     {
         var query = dbContext.TaskLists
-            .Include(tl => tl.ListItems)
+            .Include(tl => tl.ListItems!.OrderBy(i => i.Priority).ThenBy(e => e.CreatedAt))
             .AsNoTracking();
 
-        if (filter?.Done != null)
+        if (filter?.Done.HasValue == true)
         {
             query = query.Where(e => (e.ListItems != null) && e.ListItems.Any(i => i.IsDone == filter.Done.Value));
         }
 
-        if (filter?.DueAtFrom != null)
+        if (filter?.DueAtFrom.HasValue == true && filter?.DueAtTo.HasValue == true)
         {
-            query = query.Where(e => e.ListItems != null && e.ListItems.Any(i => i.DueAt >= filter.DueAtFrom));
+            var fromUtc = filter.DueAtFrom.Value.ToUniversalTime();
+            var toUtc = filter.DueAtTo.Value.ToUniversalTime();
+            query = query.Where(e => e.ListItems != null && 
+                                     e.ListItems.Any(i => i.DueAt.HasValue && i.DueAt.Value >= fromUtc && i.DueAt.Value <= toUtc));
         }
 
-        if (filter?.DueAtTo != null)
-        {
-            query = query.Where(e => e.ListItems != null && e.ListItems.Any(i => i.DueAt <= filter.DueAtTo));
-        }
 
-        if (filter?.IncludesText != null)
+        if (filter?.IncludesText != null) // hasValue only in value types
         {
             query = query.Where(e => e.Title.Contains(filter.IncludesText) 
                                      || e.ListItems != null 
                                      && e.ListItems.Any(i => i.Description.Contains(filter.IncludesText)));       
         }
+        
+        if (filter?.Priority.HasValue == true) 
+        {
+            query = query.Where(e => e.ListItems != null && e.ListItems.Any(i => i.Priority == filter.Priority.Value));       
+        }
 
         return await query
-            .OrderBy(e => e.CreatedAt)
+            .OrderByDescending(e => e.CreatedAt)
             .Select(e => TaskListDalMapper.Map(e))
             .ToListAsync();
     }
@@ -45,6 +49,7 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
     public async Task<TaskListDalDTO?> FindAsync(Guid id)
     {
         return await dbContext.TaskLists
+            .Include(tl => tl.ListItems!.OrderBy(i => i.Priority).ThenBy(e => e.CreatedAt))
             .AsNoTracking()
             .Where(e => e.Id.Equals(id))
             .Select(e => TaskListDalMapper.Map(e))

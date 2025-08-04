@@ -38,29 +38,6 @@ export class ListItemService {
     };
   }
 
-  async getAllAsync(): Promise<ResultObject<ListItem[]>> {
-    try {
-      const response = await this.axiosInstance.get<ListItem[]>(this.basePath);
-      return this.handleResponse(response);
-    } catch (error) {
-      console.log("error: ", (error as AxiosError).message);
-      return {
-        statusCode: (error as AxiosError).status ?? 0,
-        errors: [(error as AxiosError).code ?? "???"],
-      };
-    }
-  }
-
-  async getAsync(id: string): Promise<ResultObject<ListItem>> {
-    try {
-      const response = await this.axiosInstance.get<ListItem>(
-        this.basePath + id
-      );
-      return this.handleResponse(response);
-    } catch (error) {
-      return this.handleError(error as AxiosError);
-    }
-  }
 
   async addAsync(entity: ListItem): Promise<ResultObject<ListItem>> {
     try {
@@ -77,7 +54,6 @@ export class ListItemService {
   async deleteAsync(id: string): Promise<ResultObject<null>> {
     try {
       const response = await this.axiosInstance.delete<null>(this.basePath + id);
-
       return this.handleResponse(response);
     } catch (error) {
       return this.handleError(error as AxiosError);
@@ -97,16 +73,4 @@ export class ListItemService {
     }
   }
 
-  async getListItemsByTaskList(id : string): Promise<ResultObject<ListItem[]>> {
-    try {
-      const response = await this.axiosInstance.get<ListItem[]>(`${this.basePath}byTask/${id}`);
-      return this.handleResponse(response);
-    } catch (error) {
-      console.log("error: ", (error as AxiosError).message);
-      return {
-        statusCode: (error as AxiosError).status ?? 0,
-        errors: [(error as AxiosError).code ?? "???"],
-      };
-    }
-  }
 }

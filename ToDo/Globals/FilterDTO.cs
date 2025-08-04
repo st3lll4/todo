@@ -11,11 +11,18 @@ public class FilterDTO : IValidatableObject
     [MaxLength(256)]
     public string? IncludesText { get; set; }
     
+    public EPriorityLevel? Priority { get; set; }
+    
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (DueAtFrom > DueAtTo)
         {
-            yield return new ValidationResult("The first date range has to be before second one", [nameof(DueAtTo), nameof(DueAtFrom)]);
+            yield return new ValidationResult("The from date has to be before the to date", [nameof(DueAtFrom), nameof(DueAtTo)]);
+        }
+        
+        if (DueAtFrom.HasValue && DueAtTo.HasValue == false || DueAtFrom.HasValue == false && DueAtTo.HasValue)
+        {
+            yield return new ValidationResult("Please specify both from and to dates for filtering", [nameof(DueAtFrom), nameof(DueAtTo)]);
         }
     }
 }

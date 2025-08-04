@@ -58,7 +58,6 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                taskList.CreatedAt = taskList.CreatedAt.ToUniversalTime();
                 taskList.Id = Guid.NewGuid();
                 _context.Add(taskList);
                 await _context.SaveChangesAsync();
@@ -99,7 +98,6 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    taskList.CreatedAt = taskList.CreatedAt.ToUniversalTime();
                     _context.Update(taskList);
                     await _context.SaveChangesAsync();
                 }

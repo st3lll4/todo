@@ -5,7 +5,7 @@ export interface ListItem {
     description: string
     isDone: boolean
     priority: PriorityLevel
-    dueAt: Date
+    dueAt?: Date
     taskListId?: string
     parentItemId?: string
     parentItem?: ListItem

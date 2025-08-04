@@ -10,7 +10,7 @@ public class ListItemBLLDTO
     public bool IsDone { get; set; }
     public EPriorityLevel Priority { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     public DateTime? DueAt { get; set; }
 

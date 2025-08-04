@@ -12,7 +12,7 @@ public class ListItemDTO : IValidatableObject
     public bool IsDone { get; set; }
     public EPriorityLevel Priority { get; set; }
     
-    public DateTime? CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; } 
     
     public DateTime? DueAt { get; set; }
     
@@ -26,9 +26,9 @@ public class ListItemDTO : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (DueAt < DateTime.Now.ToUniversalTime())
+        if (ParentItem?.Id == Id)
         {
-            yield return new ValidationResult("The task needs to be due at in the future", [nameof(DueAt)]);
+            yield return new ValidationResult("Parent item and child item ID error", [nameof(Id), nameof(ParentItemId)]);
         }
     }
 }

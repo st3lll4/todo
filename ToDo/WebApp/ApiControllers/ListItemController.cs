@@ -22,19 +22,7 @@ namespace WebApp.ApiControllers
         {
             _service = service;
         }
-        
-        /// <summary>
-        /// Gets all list items
-        /// </summary>
-        /// <returns>Collection of list items</returns>
-        [HttpGet]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<ListItemDTO>), 200)]
-        public async Task<ActionResult<IEnumerable<ListItemDTO>>> GetListItems()
-        {
-            var taskLists = await _service.AllAsync();
-            return Ok(taskLists.Select(ListItemMapper.Map));
-        }
+       
 
         /// <summary>
         /// Gets a specific list item by id
@@ -55,25 +43,6 @@ namespace WebApp.ApiControllers
             }
 
             return Ok(ListItemMapper.Map(listItem));
-        }
-        
-        /// <summary>
-        /// Gets all list items for a specific task list
-        /// </summary>
-        /// <param name="taskListId">The id of the task list</param>
-        /// <returns>Collection of list items belonging to the task list</returns>
-        [HttpGet("byTask/{taskListId}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<ListItemDTO>> GetListItemsByTaskList(Guid taskListId)
-        {
-            if (taskListId == Guid.Empty)
-            {
-                return BadRequest();
-            }
-            
-            var result = await _service.GetListItemsByTaskList(taskListId);
-            return Ok(result.Select(ListItemMapper.Map));
         }
 
         /// <summary>

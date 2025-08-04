@@ -63,7 +63,6 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                listItem.CreatedAt = listItem.CreatedAt.ToUniversalTime();
                 listItem.DueAt = listItem.DueAt?.ToUniversalTime();
                 listItem.Id = Guid.NewGuid();
                 _context.Add(listItem);
@@ -109,7 +108,6 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    listItem.CreatedAt = listItem.CreatedAt.ToUniversalTime();
                     listItem.DueAt = listItem.DueAt?.ToUniversalTime();
                     _context.Update(listItem);
                     await _context.SaveChangesAsync();

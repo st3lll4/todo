@@ -11,14 +11,12 @@ public class TaskListBLLMapper
         {
             Id = dto.Id,
             Title = dto.Title,
-            CreatedAt = dto.CreatedAt,
             ListItems = dto.ListItems?.Select(i => new ListItemDalDTO
             {
                 Id = i.Id,
                 Description = i.Description,
                 IsDone = i.IsDone,
                 Priority = i.Priority,
-                CreatedAt = i.CreatedAt,
                 DueAt = i.DueAt,
                 TaskListId = i.TaskListId
             }).ToList()

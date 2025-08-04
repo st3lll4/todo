@@ -7,14 +7,6 @@ namespace DAL.Repositories;
 
 public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
 {
-    public async Task<IEnumerable<ListItemDalDTO>> AllAsync()
-    {
-        return await dbContext.ListItems
-            .AsNoTracking()
-            .OrderBy(e => e.CreatedAt)
-            .Select(e => ListItemDalMapper.Map(e))
-            .ToListAsync();
-    }
 
     public async Task<ListItemDalDTO?> FindAsync(Guid id)
     {
@@ -49,13 +41,5 @@ public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<ListItemDalDTO>> GetListItemsByTaskList(Guid taskListId)
-    {
-        var items = await dbContext.ListItems
-            .AsNoTracking()
-            .OrderBy(e => e.CreatedAt)
-            .Where(e => e.TaskListId.Equals(taskListId))
-            .ToListAsync();
-        return items.Select(ListItemDalMapper.Map);
-    }
+    
 }
