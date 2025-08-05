@@ -20,11 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// used for older style [Column(TypeName = "jsonb")] for LangStr
-#pragma warning disable CS0618 // Type or member is obsolete
-NpgsqlConnection.GlobalTypeMapper.EnableDynamicJson();
-#pragma warning restore CS0618 // Type or member is obsolete
-
 builder.Services.AddControllers(options =>
     {
         options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
