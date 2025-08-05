@@ -14,38 +14,43 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
             .Include(tl => tl.ListItems!.OrderBy(i => i.CreatedAt).ThenBy(e => e.IsDone))
             .AsNoTracking();
 
-        if (filter?.Done.HasValue == true)
+        var loweredText = filter?.IncludesText?.ToLower();
+
+        var hasText = !string.IsNullOrWhiteSpace(loweredText);
+        var hasPriority = filter?.Priority.HasValue == true;
+        var hasDone = filter?.Done.HasValue == true;
+        var hasDueRange = filter?.DueAtFrom.HasValue == true && filter?.DueAtTo.HasValue == true;
+
+        if (hasText || hasPriority || hasDone || hasDueRange)
         {
-            query = query.Where(e => (e.ListItems != null) && e.ListItems.Any(i => i.IsDone == filter.Done.Value));
+            var fromUtc = filter?.DueAtFrom?.ToUniversalTime();
+            var toUtc = filter?.DueAtTo?.ToUniversalTime();
+
+            query = query.Where(e =>
+                (
+                    (hasText && loweredText != null && e.Title.ToLower().Contains(loweredText))
+                )
+                ||
+                (
+                    e.ListItems != null &&
+                    e.ListItems.Any(i =>
+                        loweredText != null &&
+                        (!hasText || i.Description.ToLower().Contains(loweredText)) &&
+                        (!hasPriority || filter != null && filter.Priority != null &&
+                            i.Priority == filter.Priority.Value) &&
+                        (!hasDone || filter != null && filter.Done != null && i.IsDone == filter.Done.Value) &&
+                        (!hasDueRange || (i.DueAt.HasValue && i.DueAt.Value >= fromUtc && i.DueAt.Value <= toUtc))
+                    )
+                ));
         }
 
-        if (filter?.DueAtFrom.HasValue == true && filter?.DueAtTo.HasValue == true)
-        {
-            var fromUtc = filter.DueAtFrom.Value.ToUniversalTime();
-            var toUtc = filter.DueAtTo.Value.ToUniversalTime();
-            query = query.Where(e => e.ListItems != null &&
-                                     e.ListItems.Any(i =>
-                                         i.DueAt.HasValue && i.DueAt.Value >= fromUtc && i.DueAt.Value <= toUtc));
-        }
-
-
-        if (filter?.IncludesText != null)
-        {
-            query = query.Where(e => e.Title.Contains(filter.IncludesText)
-                                     || e.ListItems != null
-                                     && e.ListItems.Any(i => i.Description.Contains(filter.IncludesText)));
-        }
-
-        if (filter?.Priority.HasValue == true)
-        {
-            query = query.Where(e => e.ListItems != null && e.ListItems.Any(i => i.Priority == filter.Priority.Value));
-        }
 
         return await query
             .OrderByDescending(e => e.CreatedAt)
             .Select(e => TaskListDalMapper.Map(e))
             .ToListAsync();
     }
+
 
     public async Task<TaskListDalDTO?> FindAsync(Guid id)
     {
