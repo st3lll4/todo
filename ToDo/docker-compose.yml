@@ -19,7 +19,7 @@ services:
       - todo-backend
 
   postgres:
-    container_name: "postgres"
+    container_name: "todo_postgres"
     image: postgres:15
     restart: unless-stopped
     environment:
