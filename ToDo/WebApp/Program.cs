@@ -90,7 +90,7 @@ await SetupAppData(app, app.Configuration);
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-    app.UseDeveloperExceptionPage(); 
+    app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -107,7 +107,7 @@ else
                 await context.Response.WriteAsync(new ErrorViewModel
                 {
                     Code = context.Response.StatusCode,
-                    Message = "Internal Server Error." 
+                    Message = "Internal Server Error."
                 }.ToString() ?? "");
             }
         });
@@ -118,11 +118,8 @@ app.UseCors("CorsAllowAll");
 app.UseRouting();
 app.UseAuthorization();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapStaticAssets();
 
@@ -177,7 +174,7 @@ static async Task SetupAppData(IApplicationBuilder app, IConfiguration configura
 
 static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logger)
 {
-    var maxRetries = 30; 
+    var maxRetries = 30;
     var retryCount = 0;
 
     while (retryCount < maxRetries)
@@ -196,7 +193,7 @@ static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logg
             if (e.Message.Contains("does not exist"))
             {
                 logger.LogWarning("Database does not exist. Will attempt to create via migrations.");
-                return; 
+                return;
             }
 
             retryCount++;
