@@ -1,14 +1,14 @@
 ## A simple to-do list application
-#### fulfills the requirements for a small app while still demonstrating best code practises
+#### 💁 Fulfills all the requirements for a small app while still demonstrating best code practises
 - Technologies used: 
   - .NET backend
   - Next.js frontend
     - Flowbite React UI components with custom Tailwind (because the library is built on Tailwind and even though it can be creatively limiting on its own, it is highly customizable)
-  - Postgres DB in docker
+  - Postgres DB in docker 🐳 
 
 ### Some specifications 
 - API functionality
-  - Filtering
+  - Filtering 
     - it can be tested in swagger at http://localhost:5066/swagger, and it is optimized to my best ability :)
     - applied to GET /api/taskLists endpoint and is an optional parameter
     - fetches all lists that have a part which matches the filter, or any of their items matches the filter (multiple filters look for an item that matches all, not one)
@@ -18,7 +18,7 @@
   - Create them
   - Update them
   - Delete them
-- Database design
+- Database design 
   - TaskList entity
   - ListItem entity
   - A TaskList can have many ListItems 
