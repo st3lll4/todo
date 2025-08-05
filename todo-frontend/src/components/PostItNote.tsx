@@ -1,5 +1,6 @@
 import {TaskList} from "@/types/TaskList";
 import {Badge, Card, Checkbox} from "flowbite-react";
+import {PriorityLevel} from "@/types/PriorityLevel";
 
 interface PostItNoteProps {
     list: TaskList;
@@ -9,6 +10,10 @@ interface PostItNoteProps {
 
 export default function PostItNote({list, colorClass, onClick}: PostItNoteProps) {
     const visibleItems = list.listItems?.slice(0, 7);
+
+    const priorityOrder = Object.values(PriorityLevel);
+    const sortedItems = visibleItems?.sort((a, b) => priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority));
+
     const remainingCount = (list.listItems?.length || 0) - 7;
     const completedCount = list.listItems?.filter(item => item.isDone).length || 0;
     const totalCount = list.listItems?.length || 0;
@@ -28,9 +33,9 @@ export default function PostItNote({list, colorClass, onClick}: PostItNoteProps)
             </h3>
 
             <div className="flex-1">
-                {visibleItems?.map((item, index) => (
+                {sortedItems?.map((item, index) => (
                     <div
-                        key={item.id || index}
+                        key={index}
                         className="flex items-center gap-2 my-1 text-sm"
                     >
                         <Checkbox
