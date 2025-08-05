@@ -76,11 +76,11 @@ export default function TaskListGrid() {
 
     return <div className="p-6">
         <div className="grid gap-6 grid-cols-5 justify-between items-center mb-6">
-            <h1 className="text-2xl col-span-4 font-semibold text-green-900">My to-do lists</h1>
+            <h1 className="text-2xl col-span-4 font-semibold text-green-900 dark:text-gray-100">My to-do lists</h1>
 
             <Button
                 onClick={() => openModal()}
-                className="col-span-1 px-6 py-3 bg-white hover:border-green-600 transition-colors hover:text-green-900 hover:bg-green-100 rounded-lg shadow-sm text-green-900 font-medium"
+                className="col-span-1 px-6 py-3 bg-white hover:border-green-600 transition-colors hover:text-green-900 hover:bg-green-100 rounded-lg shadow-sm text-green-900 font-medium dark:text-gray-100 dark:hover:text-gray-100  dark:bg-gray-900 dark:hover:bg-gray-500"
             >
                 Create +
             </Button>

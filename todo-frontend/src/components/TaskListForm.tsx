@@ -182,7 +182,7 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
         }
     };
     return <ModalBody className="mx-4">
-        <p className='mb-4'>Set a title<span className='text-red-600'>*</span></p>
+        <p className='mb-4 dark:text-gray-200'>Set a title<span className='dark:text-red-300'>*</span></p>
         <Controller
             name="title"
             control={control}
@@ -208,11 +208,11 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
 
         <HR/>
 
-        <div className="grid grid-cols-10 gap-2 mt-4 text-sm text-gray-700 items-center justify-items-start">
+        <div className="grid grid-cols-10 gap-2 mt-4 text-sm text-gray-700 dark:text-gray-200 items-center justify-items-start">
             <div className="col-span-1">Done</div>
-            <div className="col-span-4">Description<span className='text-red-600'>*</span></div>
+            <div className="col-span-4">Description<span className='dark:text-red-300'>*</span></div>
             <div className="col-span-3">Due at</div>
-            <div className="col-span-1">Priority<span className='text-red-600'>*</span></div>
+            <div className="col-span-1">Priority<span className='dark:text-red-300'>*</span></div>
         </div>
 
         {fields.map((field, index) => (
@@ -284,7 +284,7 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
                     <button
                         type="button"
                         onClick={() => removeTodo(index)}
-                        className="col-span-1 text-sm justify-self-center text-red-500 hover:text-red-800"
+                        className="col-span-1 text-sm justify-self-center text-red-500 dark:text-red-300 hover:text-red-800 dark:hover:text-red-500"
                     >
                         x
                     </button>
@@ -297,7 +297,7 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
                 {fields.map((_, index) => (
                     <div key={index}>
                         {errors.listItems?.[index]?.description && (
-                            <p className="text-red-500 text-sm">
+                            <p className="text-red-500 dark:text-red-300 text-sm">
                                 Todo {index + 1}:{" "}
                                 {errors.listItems[index]?.description?.message}
                             </p>
@@ -311,7 +311,8 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
             <button
                 type="button"
                 onClick={addTodo}
-                className="flex items-center px-4 py-2 bg-green-400 text-green-800 rounded-full hover:bg-green-600 hover:text-green-200 transition-colors"
+                className="flex items-center px-4 py-2 bg-green-400 text-green-800 rounded-full hover:bg-green-600 hover:text-green-200
+                  dark:bg-green-200 transition-colors"
             >
                 <p>+</p>
             </button>
@@ -322,14 +323,14 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
             {list?.id &&
                 <button
                     type="button"
-                    className="px-6 py-2 bg-red-400 text-white rounded hover:bg-red-600 transition-colors"
+                    className="px-6 py-2 bg-red-400 dark:bg-pink-800 text-white rounded hover:bg-red-600 transition-colors"
                     onClick={deleteList(list.id)}
                 >
                     Delete
                 </button>}
             <button
                 type="button"
-                className="px-6 py-2 bg-green-800 text-white rounded hover:bg-green-600 transition-colors"
+                className="px-6 py-2 bg-green-800 dark:bg-green-600 text-white rounded hover:bg-green-600 transition-colors"
                 onClick={handleSubmit(onSubmit)}
             >
                 Save

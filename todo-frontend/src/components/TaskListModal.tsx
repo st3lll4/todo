@@ -20,7 +20,7 @@ export default function TaskListModal({list, isOpen, onClose}: TaskListModalProp
         console.error("Error:", error);
     };
 
-    return <Modal dismissible show={isOpen} onClose={onClose} size="4xl">
+    return <Modal dismissible show={isOpen} onClose={onClose}  size="4xl">
         <ModalHeader className='mx-4'>{ list ? `Editing "${list.title}"` : 'New'}</ModalHeader>
 
         {list && <TaskListForm

@@ -16,7 +16,7 @@ export default function PostItNote({list, colorClass, onClick}: PostItNoteProps)
 
     return <Card
         onClick={onClick}
-        className={`${colorClass} border-2 min-w-[12rem] cursor-pointer transform hover:scale-105 transition-transform duration-200 shadow-md hover:shadow-lg min-h-[16rem] relative`}
+        className={`${colorClass} border-2 min-w-[12rem] cursor-pointer transform hover:scale-105 transition-transform duration-200 shadow-md dark:${colorClass} dark:border-white-1 hover:shadow-lg min-h-[16rem] relative`}
     >
         <div
             className="absolute -top-2 left-1/4 w-16 h-4 bg-yellow-200 opacity-50 rounded transform -rotate-12"></div>
@@ -34,7 +34,7 @@ export default function PostItNote({list, colorClass, onClick}: PostItNoteProps)
                     >
                         <Checkbox
                             checked={item.isDone}
-                            className="min-w-4 min-h-4"
+                            className="min-w-4 min-h-4 dark:bg-green-50 dark:border-gray-300"
                             readOnly
                         />
 
