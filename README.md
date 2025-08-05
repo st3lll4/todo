@@ -1,4 +1,4 @@
-## A simple to-do list application, which fulfills the requirements for a small app.
+## A simple to-do list application, which fulfills the requirements for a small app while still demonstrating best code practises
 - Technologies used: 
   - .NET backend
   - Next.js frontend
