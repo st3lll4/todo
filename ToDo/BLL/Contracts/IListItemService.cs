@@ -4,7 +4,6 @@ namespace BLL.Contracts;
 
 public interface IListItemService
 {
-
     Task<ListItemBLLDTO?> FindAsync(Guid id);
 
     Task AddAsync(ListItemBLLDTO entity);

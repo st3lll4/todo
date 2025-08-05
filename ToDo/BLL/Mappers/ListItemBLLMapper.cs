@@ -3,7 +3,7 @@ using DAL.DTOs;
 
 namespace BLL.Mappers;
 
-public class ListItemBLLMapper 
+public class ListItemBLLMapper
 {
     public static ListItemDalDTO Map(ListItemBLLDTO dto)
     {

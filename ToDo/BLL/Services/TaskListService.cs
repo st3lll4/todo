@@ -17,8 +17,7 @@ public class TaskListService(ITaskListRepository repository) : ITaskListService
     public async Task<TaskListBLLDTO?> FindAsync(Guid id)
     {
         var dalItem = await repository.FindAsync(id);
-        if (dalItem == null) return null;
-        return TaskListBLLMapper.Map(dalItem);
+        return dalItem == null ? null : TaskListBLLMapper.Map(dalItem);
     }
 
     public async Task AddAsync(TaskListBLLDTO entity)

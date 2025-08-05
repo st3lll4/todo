@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
 
+// Kept for DB testing, not necessary in the provided task
 namespace WebApp.Controllers
 {
     public class ListItemController : Controller

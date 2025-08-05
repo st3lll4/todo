@@ -4,6 +4,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers;
 
+// Kept for DB testing, not necessary in the provided task
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

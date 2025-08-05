@@ -23,21 +23,22 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
         {
             var fromUtc = filter.DueAtFrom.Value.ToUniversalTime();
             var toUtc = filter.DueAtTo.Value.ToUniversalTime();
-            query = query.Where(e => e.ListItems != null && 
-                                     e.ListItems.Any(i => i.DueAt.HasValue && i.DueAt.Value >= fromUtc && i.DueAt.Value <= toUtc));
+            query = query.Where(e => e.ListItems != null &&
+                                     e.ListItems.Any(i =>
+                                         i.DueAt.HasValue && i.DueAt.Value >= fromUtc && i.DueAt.Value <= toUtc));
         }
 
 
-        if (filter?.IncludesText != null) // hasValue only in value types
+        if (filter?.IncludesText != null)
         {
-            query = query.Where(e => e.Title.Contains(filter.IncludesText) 
-                                     || e.ListItems != null 
-                                     && e.ListItems.Any(i => i.Description.Contains(filter.IncludesText)));       
+            query = query.Where(e => e.Title.Contains(filter.IncludesText)
+                                     || e.ListItems != null
+                                     && e.ListItems.Any(i => i.Description.Contains(filter.IncludesText)));
         }
-        
-        if (filter?.Priority.HasValue == true) 
+
+        if (filter?.Priority.HasValue == true)
         {
-            query = query.Where(e => e.ListItems != null && e.ListItems.Any(i => i.Priority == filter.Priority.Value));       
+            query = query.Where(e => e.ListItems != null && e.ListItems.Any(i => i.Priority == filter.Priority.Value));
         }
 
         return await query

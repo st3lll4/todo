@@ -27,7 +27,7 @@ public static class AppDataInit
 
             context.TaskLists.AddRange(lists);
         }
-        
+
         try
         {
             await context.SaveChangesAsync();
@@ -66,6 +66,7 @@ public static class AppDataInit
                     Console.WriteLine($@"Missing list: {itemData.TaskTitle} for item: {itemData.Description}");
                 }
             }
+
             context.ListItems.AddRange(itemsToAdd);
             try
             {

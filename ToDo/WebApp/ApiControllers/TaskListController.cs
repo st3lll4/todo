@@ -11,7 +11,7 @@ namespace WebApp.ApiControllers
     public class TaskListController : ControllerBase
     {
         private readonly ITaskListService _service;
-        
+
         public TaskListController(ITaskListService service)
         {
             _service = service;

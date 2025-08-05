@@ -7,7 +7,6 @@ namespace DAL.Repositories;
 
 public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
 {
-
     public async Task<ListItemDalDTO?> FindAsync(Guid id)
     {
         return await dbContext.ListItems
@@ -40,6 +39,4 @@ public class ListItemRepository(AppDbContext dbContext) : IListItemRepository
         dbContext.Remove(dbEntity);
         await dbContext.SaveChangesAsync();
     }
-
-    
 }
