@@ -36,8 +36,8 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
             ||
             (e.ListItems != null && e.ListItems.Any(i =>
                 (!hasText || i.Description.ToLower().Contains(loweredText!)) &&
-                (!hasPriority || i.Priority == filter.Priority) &&
-                (!hasDone || i.IsDone == filter.Done) &&
+                (!hasPriority || i.Priority == filter!.Priority) &&
+                (!hasDone || i.IsDone == filter!.Done) &&
                 (!hasDueRange || (i.DueAt.HasValue && i.DueAt >= fromUtc && i.DueAt <= toUtc))
             ))
         );
