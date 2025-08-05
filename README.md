@@ -1,1 +1,35 @@
-# todo
+## A simple to-do list application, which fulfills the requirements for a small app.
+- Technologies used: 
+  - .NET backend
+  - Next.js frontend
+    - Flowbite React UI components with custom Tailwind (because the library is built on Tailwind and even though it can be creatively limiting on its own, it is highly customizable)
+  - Postgres DB in docker
+
+### Some specifications 
+- API functionality
+  - Filtering, it can be tested in swagger at http://localhost:5066/swagger, and it is optimized to my best ability :)
+  - Can add todos under todos infinitely
+- Frontend functionality 
+  - View todos
+  - Create them
+  - Update them
+  - Delete them
+---
+## Development Setup
+
+### Prerequisites
+- Docker and Docker Compose installed
+
+### Quick Start
+1. Clone the repo
+2. In backend root folder (ToDo) run: `dotnet ef migrations add --project DAL --startup-project WebApp --context AppDbContext initial`
+3. Run: `docker-compose up --build`
+4. **Access the app at: http://localhost:3000**
+5. Be more productive thanks to this small app :)
+
+### Services
+- Frontend: http://localhost:3000
+- Backend: http://localhost:5066
+- Database: localhost:7890
+
+_author: Stella Tukia_
