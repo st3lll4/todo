@@ -1,6 +1,5 @@
 using DAL.DTOs;
 using Domain;
-using Globals;
 
 namespace DAL.Mappers;
 

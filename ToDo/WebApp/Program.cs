@@ -1,19 +1,17 @@
+using System.Net;
 using System.Text.Json.Serialization;
-using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 using BLL.Contracts;
 using BLL.Services;
 using DAL;
 using DAL.Contracts;
 using DAL.DataSeeding;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Options;
 using Npgsql;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using WebApp;
+using WebApp.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,10 +29,7 @@ builder.Services.AddControllers(options =>
     {
         options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
     })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
-    });
+    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
 
 if (builder.Environment.IsProduction())
@@ -95,19 +90,39 @@ await SetupAppData(app, app.Configuration);
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage(); 
 }
 else
 {
-    app.UseExceptionHandler();
+    app.UseExceptionHandler(appError =>
+    {
+        appError.Run(async context =>
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "application/json";
+
+            var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+            if (contextFeature != null)
+            {
+                await context.Response.WriteAsync(new ErrorViewModel
+                {
+                    Code = context.Response.StatusCode,
+                    Message = "Internal Server Error." 
+                }.ToString() ?? "");
+            }
+        });
+    });
 }
 
-app.UseRouting();
 app.UseCors("CorsAllowAll");
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
+app.UseRouting();
 app.UseAuthorization();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.MapStaticAssets();
 
@@ -122,6 +137,7 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
 static async Task SetupAppData(IApplicationBuilder app, IConfiguration configuration)
 {
     using var serviceScope = app.ApplicationServices
@@ -161,29 +177,43 @@ static async Task SetupAppData(IApplicationBuilder app, IConfiguration configura
 
 static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logger)
 {
+    var maxRetries = 30; 
+    var retryCount = 0;
 
-    while (true)
+    while (retryCount < maxRetries)
     {
         try
         {
             ctx.Database.OpenConnection();
             ctx.Database.CloseConnection();
+            logger.LogInformation("Database connection successful");
             return;
         }
         catch (PostgresException e)
         {
-            logger.LogWarning("Checked postgres db connection. Got: {}", e.Message);
+            logger.LogWarning("Checked postgres db connection. Got: {Message}", e.Message);
 
             if (e.Message.Contains("does not exist"))
             {
-                logger.LogWarning("Applying migration, probably db is not there (but server is)");
-                return;
+                logger.LogWarning("Database does not exist. Will attempt to create via migrations.");
+                return; 
             }
 
-            logger.LogWarning("Waiting for db connection. Sleep 1 sec");
-            Thread.Sleep(1000);
+            retryCount++;
+            logger.LogWarning("Waiting for db connection. Retry {RetryCount}/{MaxRetries}. Sleep 2 sec", retryCount,
+                maxRetries);
+            Thread.Sleep(2000);
+        }
+        catch (Exception e)
+        {
+            retryCount++;
+            logger.LogWarning("Database connection failed with: {Message}. Retry {RetryCount}/{MaxRetries}", e.Message,
+                retryCount, maxRetries);
+            Thread.Sleep(2000);
         }
     }
+
+    throw new InvalidOperationException($"Could not connect to database after {maxRetries} attempts");
 }
 
 // needed for testing 

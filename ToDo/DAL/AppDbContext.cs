@@ -32,6 +32,10 @@ public class AppDbContext : DbContext
             .Property(e => e.CreatedAt)
             .HasDefaultValueSql("NOW()")
             .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<ListItem>()
+            .Property(cp => cp.Priority)
+            .HasConversion<string>();
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
