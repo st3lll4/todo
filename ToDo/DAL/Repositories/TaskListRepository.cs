@@ -11,7 +11,7 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
     public async Task<IEnumerable<TaskListDalDTO>> AllAsync(FilterDTO? filter)
     {
         var query = dbContext.TaskLists
-            .Include(tl => tl.ListItems!.OrderBy(i => i.Priority).ThenBy(e => e.CreatedAt))
+            .Include(tl => tl.ListItems!.OrderBy(i => i.CreatedAt).ThenBy(e => e.IsDone))
             .AsNoTracking();
 
         if (filter?.Done.HasValue == true)
@@ -50,7 +50,7 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
     public async Task<TaskListDalDTO?> FindAsync(Guid id)
     {
         return await dbContext.TaskLists
-            .Include(tl => tl.ListItems!.OrderBy(i => i.Priority).ThenBy(e => e.CreatedAt))
+            .Include(tl => tl.ListItems!.OrderBy(i => i.CreatedAt).ThenBy(e => e.IsDone))
             .AsNoTracking()
             .Where(e => e.Id.Equals(id))
             .Select(e => TaskListDalMapper.Map(e))

@@ -8,7 +8,7 @@ export class ListItemService {
   private basePath : string = 'listItems/'
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5066/api',
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
