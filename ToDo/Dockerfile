@@ -4,6 +4,8 @@ WORKDIR /app
 COPY . ./
 RUN dotnet restore
 
+RUN dotnet test
+
 RUN dotnet publish WebApp/WebApp.csproj -c Release -o out
 
 EXPOSE 8080
