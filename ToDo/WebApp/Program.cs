@@ -212,8 +212,3 @@ static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logg
 
     throw new InvalidOperationException($"Could not connect to database after {maxRetries} attempts");
 }
-
-// needed for testing 
-public partial class Program
-{
-}
