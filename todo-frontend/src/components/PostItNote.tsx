@@ -1,6 +1,5 @@
 import {TaskList} from "@/types/TaskList";
 import {Badge, Card, Checkbox} from "flowbite-react";
-import {PriorityLevel} from "@/types/PriorityLevel";
 
 interface PostItNoteProps {
     list: TaskList;
@@ -14,8 +13,6 @@ export default function PostItNote({list, colorClass, onClick}: PostItNoteProps)
     const remainingCount = (list.listItems?.length || 0) - 7;
     const completedCount = list.listItems?.filter(item => item.isDone).length || 0;
     const totalCount = list.listItems?.length || 0;
-
-    console.log('list', list);
 
     return <Card
         onClick={onClick}

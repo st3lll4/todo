@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { AxiosError } from "axios";
-import { ResultObject } from "../types/ResultObject";
-import { ListItem } from "../types/ListItem";
+import { ResultObject } from "@/types/ResultObject";
+import { ListItem } from "@/types/ListItem";
 
 export class ListItemService {
   protected axiosInstance: AxiosInstance;
@@ -31,7 +31,6 @@ export class ListItemService {
   }
 
   handleError(error: AxiosError) {
-    console.log("error: ", error.message);
     return {
       statusCode: error.status ?? 0,
       errors: [error.code ?? "???"],

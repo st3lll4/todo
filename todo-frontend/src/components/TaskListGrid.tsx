@@ -29,7 +29,6 @@ export default function TaskListGrid() {
                 return;
             }
             if (!response.data) return;
-            console.log('data', response.data);
             setTaskLists(response.data);
         } catch (error) {
             console.error(error);

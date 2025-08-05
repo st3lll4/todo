@@ -136,12 +136,9 @@ export default function TaskListForm({taskListId, onSuccess, onError}: TaskListF
                 }
                 res = await taskListService.addAsync(taskListData);
                 if (res.data?.id) {
-                    console.log('items', data.listItems);
                     data.listItems.map(async (item) => {
                         const itemWithTaskListId = {...item, taskListId: res.data?.id};
                         const result = await listItemService.addAsync(itemWithTaskListId);
-                        console.log('item', item, itemWithTaskListId);
-                        console.log('result', result);
                         if (result.errors) {
                             onError(result.errors);
                         }

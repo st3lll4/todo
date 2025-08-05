@@ -32,7 +32,6 @@ export class TaskListService {
   }
 
   handleError(error: AxiosError) {
-    console.log("error: ", error.message);
     return {
       statusCode: error.status ?? 0,
       errors: [error.code ?? "???"],
