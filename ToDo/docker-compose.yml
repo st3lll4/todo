@@ -9,6 +9,10 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:5066/api 
     ports:
       - "3000:3000"
+    volumes:
+      - ../todo-frontend:/app          
+      - /app/node_modules             
+      - /app/.next
     networks:
       - infra
     depends_on:
