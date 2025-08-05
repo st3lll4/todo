@@ -21,29 +21,26 @@ public class TaskListRepository(AppDbContext dbContext) : ITaskListRepository
         var hasDone = filter?.Done.HasValue == true;
         var hasDueRange = filter?.DueAtFrom.HasValue == true && filter?.DueAtTo.HasValue == true;
 
-        if (hasText || hasPriority || hasDone || hasDueRange)
-        {
-            var fromUtc = filter?.DueAtFrom?.ToUniversalTime();
-            var toUtc = filter?.DueAtTo?.ToUniversalTime();
-
-            query = query.Where(e =>
-                (
-                    (hasText && loweredText != null && e.Title.ToLower().Contains(loweredText))
-                )
-                ||
-                (
-                    e.ListItems != null &&
-                    e.ListItems.Any(i =>
-                        loweredText != null &&
-                        (!hasText || i.Description.ToLower().Contains(loweredText)) &&
-                        (!hasPriority || filter != null && filter.Priority != null &&
-                            i.Priority == filter.Priority.Value) &&
-                        (!hasDone || filter != null && filter.Done != null && i.IsDone == filter.Done.Value) &&
-                        (!hasDueRange || (i.DueAt.HasValue && i.DueAt.Value >= fromUtc && i.DueAt.Value <= toUtc))
-                    )
-                ));
+        if (!hasText && !hasPriority && !hasDone && !hasDueRange) {
+            return await query
+                .OrderByDescending(e => e.CreatedAt)
+                .Select(e => TaskListDalMapper.Map(e))
+                .ToListAsync();
         }
+        
+        var fromUtc = filter?.DueAtFrom?.ToUniversalTime();
+        var toUtc = filter?.DueAtTo?.ToUniversalTime();
 
+        query = query.Where(e =>
+            (hasText && e.Title.ToLower().Contains(loweredText!))
+            ||
+            (e.ListItems != null && e.ListItems.Any(i =>
+                (!hasText || i.Description.ToLower().Contains(loweredText!)) &&
+                (!hasPriority || i.Priority == filter.Priority) &&
+                (!hasDone || i.IsDone == filter.Done) &&
+                (!hasDueRange || (i.DueAt.HasValue && i.DueAt >= fromUtc && i.DueAt <= toUtc))
+            ))
+        );
 
         return await query
             .OrderByDescending(e => e.CreatedAt)
