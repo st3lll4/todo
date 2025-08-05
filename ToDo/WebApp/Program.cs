@@ -33,7 +33,7 @@ if (builder.Environment.IsProduction())
         options.UseNpgsql(
             connectionString,
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery
-            ) // optimization by npgsql
+            ) 
         )
     );
 }
@@ -43,12 +43,11 @@ else
         options.UseNpgsql(
                 connectionString,
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery
-                ) // optimization by npgsql
+                )
             )
             .ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))
-            // punishes you for querying a cartesian explosion and creates a warning 
             .EnableDetailedErrors()
-            .EnableSensitiveDataLogging() // see values that are used in sql queries
+            .EnableSensitiveDataLogging() 
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution)
     );
 }
@@ -138,7 +137,6 @@ static async Task SetupAppData(IApplicationBuilder app, IConfiguration configura
     var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<IApplicationBuilder>>();
     var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    // since app uses container, should wait the db connection
     WaitDbConnection(context, logger);
 
     if (context.Database.ProviderName!.Contains("InMemory"))
