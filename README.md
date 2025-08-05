@@ -10,7 +10,7 @@
   - Filtering
     - it can be tested in swagger at http://localhost:5066/swagger, and it is optimized to my best ability :)
     - applied to GET /api/taskLists endpoint and is an optional parameter
-    - fetches all lists that have a part which matches the filter, or any of their items matches the filter
+    - fetches all lists that have a part which matches the filter, or any of their items matches the filter (multiple filters look for an item that matches all, not one)
   - Can add todos under todos infinitely
 - Frontend functionality 
   - View todos
