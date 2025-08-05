@@ -7,13 +7,21 @@
 
 ### Some specifications 
 - API functionality
-  - Filtering, it can be tested in swagger at http://localhost:5066/swagger, and it is optimized to my best ability :)
+  - Filtering
+    - it can be tested in swagger at http://localhost:5066/swagger, and it is optimized to my best ability :)
+    - applied to GET /api/taskLists endpoint and is an optional parameter
+    - fetches all lists that have a part which matches the filter, or any of their items matches the filter
   - Can add todos under todos infinitely
 - Frontend functionality 
   - View todos
   - Create them
   - Update them
   - Delete them
+- Database design
+  - TaskList entity
+  - ListItem entity
+  - A TaskList can have many ListItems 
+  - A ListItem can have many sub-ListItems
 ---
 ## Development Setup
 
