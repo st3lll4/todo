@@ -22,7 +22,6 @@ public class TaskListService(ITaskListRepository repository) : ITaskListService
 
     public async Task AddAsync(TaskListBLLDTO entity)
     {
-        entity.CreatedAt ??= DateTime.UtcNow;
         var dalEntity = TaskListBLLMapper.Map(entity);
         await repository.AddAsync(dalEntity);
     }

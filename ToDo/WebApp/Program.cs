@@ -87,6 +87,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    // catch any unhandled exceptions and convert them to generic messages
     app.UseExceptionHandler(appError =>
     {
         appError.Run(async context =>
@@ -117,11 +118,6 @@ app.UseSwaggerUI();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
-app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
@@ -130,6 +126,7 @@ app.Run();
 
 static async Task SetupAppData(IApplicationBuilder app, IConfiguration configuration)
 {
+    // Enables access to scoped services during startup
     using var serviceScope = app.ApplicationServices
         .GetRequiredService<IServiceScopeFactory>()
         .CreateScope();

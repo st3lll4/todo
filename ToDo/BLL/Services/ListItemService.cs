@@ -15,7 +15,6 @@ public class ListItemService(IListItemRepository repository) : IListItemService
 
     public async Task AddAsync(ListItemBLLDTO entity)
     {
-        entity.CreatedAt ??= DateTime.UtcNow;
         var dalEntity = ListItemBLLMapper.Map(entity);
         await repository.AddAsync(dalEntity);
     }
